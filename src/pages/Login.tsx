@@ -2,7 +2,6 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 
 const loginSchema = z.object({
@@ -14,7 +13,6 @@ type LoginFormInputs = z.infer<typeof loginSchema>;
 
 const Login: React.FC = () => {
   const { setUser } = useAuthStore();
-  const navigate = useNavigate();
 
   const {
     register,
