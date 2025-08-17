@@ -1,84 +1,71 @@
-import React from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useAuthStore } from "../store/useAuthStore";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/auth";
 
-const loginSchema = z.object({
-  email: z.string().email("Please enter a valid email"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+const schema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
 });
 
-type LoginFormInputs = z.infer<typeof loginSchema>;
+type FormData = z.infer<typeof schema>;
 
-const Login: React.FC = () => {
-  const { setUser } = useAuthStore();
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-  } = useForm<LoginFormInputs>({
-    resolver: zodResolver(loginSchema),
-    mode: "onChange", // Validate on every change for real-time feedback
+export default function Login() {
+  const { register, handleSubmit, formState } = useForm<FormData>({
+    resolver: zodResolver(schema),
   });
+  const navigate = useNavigate();
+  const login = useAuthStore((state) => state.login);
 
-  const onSubmit = (data: LoginFormInputs) => {
-    setUser(data.email); // Simulated signup
+  const onSubmit = (data: FormData) => {
+    console.log("login success:", data);
+    login();
+    navigate("/posts");
   };
 
   return (
-    <div className="flex min-h-[80vh] items-center justify-center px-4">
-      <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-md">
-        <h1 className="text-center text-2xl font-semibold text-gray-800">Login</h1>
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-5" noValidate>
-          {/* Email */}
-          <div>
-            <input
-              type="email"
-              placeholder="Email"
-              {...register("email")}
-              className={`w-full rounded border px-4 py-2 focus:outline-none ${
-                errors.email
-                  ? "border-red-500 focus:border-red-500"
-                  : "border-gray-300 focus:border-blue-500"
-              }`}
-            />
-            {errors.email && (
-              <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
-            )}
-          </div>
+    <div className="flex items-center justify-center min-h-[80vh]">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md"
+      >
+        <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
 
-          {/* Password */}
-          <div>
-            <input
-              type="password"
-              placeholder="Password"
-              {...register("password")}
-              className={`w-full rounded border px-4 py-2 focus:outline-none ${
-                errors.password
-                  ? "border-red-500 focus:border-red-500"
-                  : "border-gray-300 focus:border-blue-500"
-              }`}
-            />
-            {errors.password && (
-              <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
-            )}
-          </div>
+        <input
+          {...register("email")}
+          placeholder="Email"
+          className={`w-full p-3 border rounded-lg mb-3 ${
+            formState.errors.email ? "border-red-500" : "border-gray-300"
+          }`}
+        />
+        {formState.errors.email && (
+          <p className="text-red-500 text-sm mb-2">
+            {formState.errors.email.message}
+          </p>
+        )}
 
-          <button
-            type="submit"
-            disabled={!isValid}
-            className={`w-full rounded px-4 py-2 font-medium text-white transition ${
-              isValid ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-300 cursor-not-allowed"
-            }`}
-          >
-            Login
-          </button>
-        </form>
-      </div>
+        <input
+          {...register("password")}
+          type="password"
+          placeholder="Password"
+          className={`w-full p-3 border rounded-lg mb-3 ${
+            formState.errors.password ? "border-red-500" : "border-gray-300"
+          }`}
+        />
+        {formState.errors.password && (
+          <p className="text-red-500 text-sm mb-2">
+            {formState.errors.password.message}
+          </p>
+        )}
+
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+        >
+          Login
+        </button>
+      </form>
     </div>
   );
-};
-
-export default Login;
+}

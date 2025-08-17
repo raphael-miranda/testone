@@ -1,33 +1,23 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const Home: React.FC = () => {
-  const navigate = useNavigate();
-
+export default function Home() {
   return (
-    <div className="flex min-h-[80vh] items-center justify-center px-4">
-      <div className="w-full max-w-lg rounded-lg bg-white p-8 shadow-md text-center">
-        <h1 className="text-3xl font-bold text-gray-800">Welcome to MyApp</h1>
-        <p className="mt-4 text-gray-600">
-          Start your journey with us. Please login or sign up to continue.
-        </p>
-        <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center">
-          <button
-            onClick={() => navigate("/login")}
-            className="rounded bg-blue-600 px-6 py-2 font-medium text-white transition hover:bg-blue-700"
-          >
-            Login
-          </button>
-          <button
-            onClick={() => navigate("/signup")}
-            className="rounded bg-green-600 px-6 py-2 font-medium text-white transition hover:bg-green-700"
-          >
-            Sign Up
-          </button>
-        </div>
+    <div className="flex flex-col items-center justify-center min-h-[80vh]">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">Welcome</h1>
+      <div className="flex gap-4">
+        <Link
+          to="/login"
+          className="rounded-lg bg-blue-600 px-5 py-2 text-white hover:bg-blue-700"
+        >
+          Login
+        </Link>
+        <Link
+          to="/signup"
+          className="rounded-lg bg-green-600 px-5 py-2 text-white hover:bg-green-700"
+        >
+          Sign Up
+        </Link>
       </div>
     </div>
   );
-};
-
-export default Home;
+}
