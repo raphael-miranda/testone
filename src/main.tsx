@@ -12,6 +12,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import PostList from "./pages/PostList";
 import CreatePost from "./pages/CreatePost";
+import PostDetail from './pages/PostDetail';
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
   { path: "/signup", element: <Signup /> },
   { path: "/posts", element: <PostList /> },
+  { path: "/post/:id", element: <PostDetail /> },
   { path: "/create-post", element: <CreatePost /> },
 ]);
 
