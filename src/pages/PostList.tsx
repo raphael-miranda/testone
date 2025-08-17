@@ -17,7 +17,7 @@ const fetchPosts = async (): Promise<Post[]> => {
 export default function PostList() {
   const { isAuthenticated, logout } = useAuthStore();
   const navigate = useNavigate();
-  
+
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
@@ -40,12 +40,20 @@ export default function PostList() {
       {/* Header with Logout button */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Posts</h1>
-        <button
-          onClick={handleLogout}
-          className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-        >
-          Logout
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={() => navigate("/create-post")}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          >
+            New Post
+          </button>
+          <button
+            onClick={handleLogout}
+            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+          >
+            Logout
+          </button>
+        </div>
       </div>
 
       {/* Post list */}
